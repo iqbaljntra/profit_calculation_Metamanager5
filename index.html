@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate Profit from CSV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.min.css">
+    <style>
+        body {
+            padding: 2rem;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .output {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculate Profit from CSV</h1>
+        <form id="upload-form">
+            <label for="file">Choose CSV file:</label>
+            <input type="file" id="file" name="file" accept=".csv" required>
+            <button type="submit" class="button-primary">Upload</button>
+        </form>
+        <div class="output" id="output"></div>
+    </div>
+
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData();
+            var fileField = document.querySelector("input[type='file']");
+            formData.append('file', fileField.files[0]);
+
+            fetch('/calculate_profit_csv', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const outputDiv = document.getElementById('output');
+                outputDiv.innerHTML = `
+                    <h2>Profit Calculation Result</h2>
+                    <p><strong>Initial Deposit Amount:</strong> ${data.jumlah_awal_deposit}</p>
+                    <p><strong>Total Withdrawals:</strong> ${data.total_withdraw}</p>
+                    <p><strong>Profit:</strong> ${data.profit}</p>
+                    <p><strong>Profit Percentage:</strong> ${data.profit_percentage.toFixed(2)}%</p>
+                `;
+            })
+            .catch(error => {
+                const outputDiv = document.getElementById('output');
+                outputDiv.innerHTML = `<p class="error">Error: ${error}</p>`;
+            });
+        });
+    </script>
+</body>
+</html>
