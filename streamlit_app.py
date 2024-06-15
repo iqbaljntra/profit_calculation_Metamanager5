@@ -39,7 +39,7 @@ def calculate_profit_from_csv(data):
 # Streamlit app
 st.title('Profit Calculation User ID History Metamanager5')
 st.write("Upload your CSV file to calculate the profit")
-st.write("For better performance, use Deals coloumn only")
+st.write("For better performance, use Deals coloumn only and works for if user has been withdrawal")
 
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 
